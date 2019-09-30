@@ -71,6 +71,12 @@ const handleDeleteItemClicked = function() {
   $('.js-shopping-list').on('click', '.js-item-delete', event => {
     // get the index of the item in store.items
     const id = getItemIdFromElement(event.currentTarget);
+    api.deleteItem(id)
+    .then(res => res.json())
+    .then(() => {
+      store.findAndDelete(id);
+      render();
+    });
     // delete the item
     store.findAndDelete(id);
     // render the updated shopping list
@@ -88,7 +94,7 @@ const handleEditShoppingItemSubmit = function() {
     api
       .updateItem(id, { name: itemName })
       .then(res => res.json())
-      .then(updatedItem => {
+      .then(() => {
         store.findAndUpdate(id, { name: itemName });
         render();
       });
@@ -105,7 +111,7 @@ const handleItemCheckClicked = function() {
       .updateItem(id, { checked: checked })
       .then(res => res.json())
       .then(() => {
-        store.findAndUpdate(id, name);
+        store.findAndUpdate(id, {checked:checked});
         render();
       });
   });
